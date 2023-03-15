@@ -11,23 +11,16 @@ jobs:
     permissions:
       security-events: write
     steps:
-      - name: Create grype configuration
-        run: |
-          cat <<EOF > $HOME/.grype.yaml
-          ignore:
-            # False positive, see https://github.com/anchore/grype/issues/558
-            - vulnerability: CVE-2015-5237
-              fix-state: unknown
-              package:
-                name: google.golang.org/protobuf
-                version: v1.26.0
-                type: go-module
-                location: "/manager"
-          EOF
-      - name: Scan operator image
-        uses: anchore/scan-action@v3
-        id: scan
+      - name: Get Release Info
+        uses: octokit/request-action@v2.x
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          image: "qserv/qserv-operator:2022.1.1-rc1"
-          acs-report-enable: true
-          fail-build: false
+          route: GET /repos/{org_repo}/releases/tags/{tag}
+
+      - name: Get Information from Release
+        run: |
+          echo '${{ steps.release.outputs.data }}' > release.json
+          jq -r '.assets[].browser_download_url' release.json > assets.txt
+          jq -r '.body' release.json > changelog.txt
