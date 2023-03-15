@@ -12,10 +12,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         
-      - name: Get TAG
-        env:
-          TAG: git tag --list | sort -V | tail -n1
-
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
         with:
@@ -23,8 +19,7 @@ jobs:
           write-mode: overwrite
           
           # name of the variable
-          contents: |
-            $TAG
+          contents run: git tag --list | sort -V | tail -n1
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
