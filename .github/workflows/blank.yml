@@ -12,18 +12,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Overwrite file
-        uses: "DamianReeves/write-file-action@master"
+      # creates JSON file job
+      - name: Create JSON file job
+        uses: schdck/create-env-json@v1
         with:
-          path: testFile.txt
-          write-mode: overwrite
-          contents: |
-            console.log('some contents')
-            
-      - name: Commit & Push
-        uses: Andro999b/push@v1.3
-        with:
-          github_token: ${{ secrets.MY_TOKEN }}
-          branch: master
-          force: true
-          message: 'Overwritten by Github Actions - ${date}'
+          file-name: 'testFile.txt'
+
+          # fill JSON with workflow data
+          Repository: ${{ github.event.repository.name }}
+          Branch: ${{ GITHUB.REF }}
+          DATE: "${{ STEPS.CURRENT-TIME.OUTPUTS.READABLETIME }}"
+          Project: ${{ GITHUB.REPOSITORY }}
+          Engineer: ${{ GITHUB.ACTOR }}
+          Server: ${{ RUNNER.OS }}
+    # GIT commands
+      - run: |
+          git commit -a -m "JSON created!";
+          git push -u origin master;
