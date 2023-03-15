@@ -11,16 +11,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-        
-      - name: Get TAG
-        env:
-          TAG: ""
-        run: git tag --list | sort -V | tail -n1
       
       - name: Set the value
         id: step_one
         run: |
-            echo "FOO=$(git status)" >> $GITHUB_ENV
+            echo "FOO=$(git tag --list | sort -V | tail -n1)" >> $GITHUB_ENV
       - name: Use the value
         id: step_two
         run: |
