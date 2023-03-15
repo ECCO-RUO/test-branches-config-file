@@ -27,5 +27,8 @@ jobs:
           Server: ${{ RUNNER.OS }}
     # GIT commands
       - run: |
-          git commit -a -m "JSON created!";
+          git config user.email "ruo@ecco.com";
+          git config user.name "ECCO-RUO"; 
+          git add .;
+          git commit -a -m "TXT created!";
           git push -u origin master;
