@@ -17,11 +17,10 @@ jobs:
           TAG: ""
         run: git tag --list | sort -V | tail -n1
         
-      - uses: actions/checkout@v2
-      - name: Set env
-        run: echo "GITHUB_SHA_SHORT=$(echo git tag --list | sort -V | tail -n1)" >> $GITHUB_ENV
-      - name: Test
-        run: echo $GITHUB_SHA_SHORT
+      - name: set up env var
+        run: echo "TAG=$(echo git describe --exact-match --tags $(git log -n1 --pretty='%h'))" >> $GITHUB_ENV
+      - name: use env var
+        run: echo ${{ env.TAG }}
         
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
