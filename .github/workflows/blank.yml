@@ -24,7 +24,7 @@ jobs:
           
           # name of the variable
           contents: |
-            ${{TAG}}
+            $TAG
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
