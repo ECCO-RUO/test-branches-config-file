@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="DUT_STRUCT_VARIABLES" Id="{75fee008-bd74-4965-a6e1-e2126a79bf49}">
+    <Declaration><![CDATA[TYPE DUT_STRUCT_VARIABLES :
+STRUCT
+	sEnvironment		:STRING;
+	sCellName			:STRING;
+	sIpAddress			:STRING;
+	sAmsNetId			:STRING;
+	sOpcUaURL			:STRING;
+	sUhfRfidOpcUaURL	:STRING;
+	sHfRfidOpcUaURL		:STRING;
+	sStation1			:STRING;
+	sStation2			:STRING;
+	sStation3			:STRING;
+	sStation4			:STRING;
+	sRelease			:STRING;
+	sTag				:STRING;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

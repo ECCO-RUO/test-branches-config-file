@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ReadFile" Id="{06788eb1-d660-4de5-9dda-892bc287d66f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReadFile
+
+VAR
+	CSVMemBufferReader		:FB_CSVMemBufferReader;
+	fbFileOpen				:FB_FileOpen;
+	fbFileGet				:FB_FileGets;
+	fbFileClose				:FB_FileClose;
+	
+	sPathName				:STRING := 'C:\!! RUO folder !!\Configuration file branches TEST\';
+	sFileName				:STRING := 'cloned repo config test\test-branches-config-file\config';
+	sConfigPathFile			:STRING(300) := CONCAT(sPathName, sFileName);
+	
+	bReset					:BOOL;
+	nCol					:INT;
+	hFile					:UINT;
+	value					:STRING[300];
+	sBufferString			:ARRAY[0..15]OF STRING;
+	iStep					:INT;
+	sLine					:STRING;
+	nRow					:INT;
+	bRead					:BOOL;
+	bEOF					:BOOL;
+	i						:INT;
+	iCRLFCounter			:INT;
+	
+	// split string
+	aSplit					:ARRAY[0..cMax] OF STRING(255);
+//	aSplit					:DUT_STRUCT_VARIABLES;
+	bResultSplit			:BOOL;
+	ii						:UDINT;
+	j						:UDINT;
+END_VAR
+VAR CONSTANT
+	cStepInit				:INT := 0;
+	cStepOpenFile			:INT := 10;
+	cStepGetLine			:INT := 20;
+	cStepEOFCheck			:INT := 25;
+	cStepReadLine			:INT := 30;
+	cStepParseData			:INT := 35;
+	cStepCloseFile			:INT := 40;
+	cStepError				:INT := 8000;
+	
+	// split string
+	cMax					:UDINT := 15;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iStep OF
+	
+	cStepInit:
+	
+		//* semicolon (;) := 16#3B => german field separator, comma (,) := 16#2C => US field separator
+		DEFAULT_CSV_FIELD_SEP := 16#3B;
+		
+		nRow := 0;
+		nCol := 0;
+		iCRLFCounter := 0;
+		bEOF := FALSE;
+		bReset := FALSE;
+		
+		// fb Reset
+		fbFileOpen(bExecute := FALSE);
+		fbFileClose(bExecute := FALSE);
+		fbFileGet(bExecute := FALSE);
+			
+		IF bRead 
+			AND NOT fbfileopen.bBusy
+			AND NOT fbfileclose.bBusy
+			AND NOT fbfileget.bBusy
+			THEN
+			
+			FOR i := 0 TO 24 DO
+				GVL.sString[i] := '';
+				
+			END_FOR
+			iStep := cStepOpenFile;
+			bRead := FALSE;
+		END_IF;
+		
+		cStepOpenFile:
+			fbFileopen(	sNetId := '', sPathName := sConfigPathFile, nMode := FOPEN_MODEREAD,
+						ttimeout := T#3S, ePath := E_OpenPath.PATH_GENERIC, bExecute := TRUE, hFile => hfile);
+					
+		IF NOT fbfileopen.bBusy THEN
+			IF fbfileopen.bError THEN
+				iStep := cStepError;	
+			ELSE
+				iStep := cStepGetLine;
+			END_IF
+		END_IF
+		
+		cStepGetLine:
+			fbFileGet(hFile := hFile, bExecute := TRUE, sLine => sLine);
+	
+		IF NOT fbFileGet.bBusy THEN
+			IF fbFileGet.bError THEN
+				iStep := cStepError;	
+			ELSE IF fbFileGet.bEOF THEN
+				bEOF := TRUE;
+			END_IF
+		(*
+			IF RIGHT( Fileget.sLine, 1 ) = '$N' THEN
+				sCSVLine := REPLACE( sCSVLine, '$R$L', 2, LEN( sCSVLine ) );
+			END_IF
+		*)
+			iStep := cStepEOFCheck;
+			END_IF
+		END_IF
+		
+		cStepEOFCheck:
+				fbFileGet(bExecute:=FALSE);
+		IF bEOF THEN
+			iStep := cStepCloseFile;
+		ELSE
+			iStep := cStepReadLine;	
+		END_IF
+	
+		cStepReadLine:
+			nCol := 0;
+			CSVMemBufferReader.eCmd := E_EnumCmdType.eEnumCmd_First;
+				REPEAT
+					CSVMemBufferReader(pBuffer := ADR(sLine), cbBuffer := SIZEOF(sLine), getValue => value);
+				
+					IF CSVMemBufferReader.bOk THEN
+						sBufferString[ncol] := value;
+						CSVMemBufferReader.eCmd := E_EnumCmdType.eEnumCmd_Next;
+						ncol := ncol + 1;
+						IF CSVMemBufferReader.bCRLF THEN
+							iCRLFCounter := iCRLFCounter + 1;
+						END_IF
+					END_IF
+				UNTIL NOT CSVMemBufferReader.bOk 
+				END_REPEAT	
+			istep := cStepParseData;
+			
+		cStepParseData:
+			// check EOF
+			IF fbFileGet.bEOF THEN
+				iStep := cStepCloseFile;
+			ELSE
+				GVL.sString[nRow] := sBufferString[0];
+				nRow := nRow + 1;
+				iStep := cStepGetLine;
+			END_IF
+		
+		cStepCloseFile:	
+			fbFileClose(hFile := hFile, bExecute := TRUE);
+			IF NOT fbFileClose.bBusy THEN
+				IF fbFileClose.bError THEN
+					iStep := cStepError;	
+				END_IF
+			ELSE
+				fbFileClose(bExecute:=FALSE);
+				iStep := cStepInit;
+			END_IF
+			
+		cStepError:
+			IF bReset THEN
+				iStep := cStepInit;
+			END_IF
+END_CASE
+
+// split/parse strings
+FOR ii := 0 TO cMax - 1 DO
+	
+	aSplit[ii] := GVL.sString[ii];
+	bResultSplit := FindAndSplitChar(sSeparatorChar := '=', pSrcString := ADR(aSplit[ii]),
+									  pLeftString := ADR(aSplit[ii + 1]), nLeftSize := SIZEOF(aSplit[ii + 1]),
+									  pRightString := ADR(aSplit[ii]), nRightSize := SIZEOF(aSplit[ii]),
+									  bSearchFromRight := FALSE);
+									  
+	// assign values from config file
+	GVL.sVars.sEnvironment		:= aSplit[0];
+	GVL.sVars.sCellName			:= aSplit[1];
+	GVL.sVars.sIpAddress 		:= aSplit[2];
+	GVL.sVars.sAmsNetId 		:= aSplit[3];
+	GVL.sVars.sOpcUaURL 		:= aSplit[4];
+	GVL.sVars.sUhfRfidOpcUaURL 	:= aSplit[5];
+	GVL.sVars.sHfRfidOpcUaURL 	:= aSplit[6];
+	GVL.sVars.sStation1			:= aSplit[7];
+	GVL.sVars.sStation2			:= aSplit[8];
+	GVL.sVars.sStation3			:= aSplit[9];
+	GVL.sVars.sStation4			:= aSplit[10];
+	GVL.sVars.sRelease			:= aSplit[11];
+	GVL.sVars.sTag				:= aSplit[12];
+	
+	IF NOT bResultSplit THEN
+		EXIT;
+	END_IF
+END_FOR
+
+
+
+
+
+	]]></ST>
+    </Implementation>
+    <LineIds Name="FB_ReadFile">
+      <LineId Id="843" Count="124" />
+      <LineId Id="1032" Count="0" />
+      <LineId Id="968" Count="9" />
+      <LineId Id="1080" Count="1" />
+      <LineId Id="978" Count="9" />
+      <LineId Id="66" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

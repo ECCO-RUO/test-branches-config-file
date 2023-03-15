@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <GVL Name="GVL" Id="{0555a834-3236-40ff-bc2a-e0a7a0670f20}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	sString				:ARRAY[0..15] OF STRING(255);
+	sVars				:DUT_STRUCT_VARIABLES;
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>
