@@ -10,21 +10,8 @@ END_VAR
     <Implementation>
       <ST><![CDATA[fbReadFile();]]></ST>
     </Implementation>
-    <Method Name="INIT" Id="{5a5b2406-f2b5-458a-82e4-eedff343e569}">
-      <Declaration><![CDATA[METHOD INIT
-VAR
-	
-END_VAR
-]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[]]></ST>
-      </Implementation>
-    </Method>
     <LineIds Name="MAIN">
       <LineId Id="1049" Count="0" />
-    </LineIds>
-    <LineIds Name="MAIN.INIT">
-      <LineId Id="5" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

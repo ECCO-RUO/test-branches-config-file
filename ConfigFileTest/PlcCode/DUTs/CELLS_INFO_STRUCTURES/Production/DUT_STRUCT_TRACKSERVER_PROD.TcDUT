@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="DUT_STRUCT_TRACKSERVER_PROD" Id="{169d449f-9f3d-4df7-84ba-0435d94ac5a1}">
+    <Declaration><![CDATA[TYPE DUT_STRUCT_TRACKSERVER_PROD :
+STRUCT
+	sCellName			:STRING := 'TRACKSERVER';
+	sIpAddress			:STRING := '10.38.190.121';
+	sAmsNetId			:STRING := '10.38.190.121.1.1';
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

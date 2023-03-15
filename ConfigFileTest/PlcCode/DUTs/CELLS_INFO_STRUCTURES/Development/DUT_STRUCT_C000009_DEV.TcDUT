@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="DUT_STRUCT_C000009_DEV" Id="{fc52cea6-c765-41ec-a060-e52d63af3fa7}">
+    <Declaration><![CDATA[TYPE DUT_STRUCT_C000009_DEV :
+STRUCT
+	sCellName			:STRING := 'C000009';
+	sIpAddress			:STRING := '';
+	sAmsNetId			:STRING := '';
+	sOpcUaURL			:STRING := 'opc.tcp://:4840';
+	sUhfRfidOpcUaURL	:STRING := 'opc.tcp://:4840';
+	sHfRfidOpcUaURL		:STRING := 'server:opc.tcp://:4840';
+	sStation1			:STRING := 'S000004';
+	sLastingPC			:STRING := '';
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
