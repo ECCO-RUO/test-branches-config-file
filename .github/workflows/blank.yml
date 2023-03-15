@@ -16,11 +16,15 @@ jobs:
         env:
           TAG: ""
         run: git tag --list | sort -V | tail -n1
-        
-      - name: set up env var
-        run: echo "TAG=$(git tag --list | sort -V | tail -n1)" >> $GITHUB_ENV
-      - name: use env var
-        run: echo ${{ env.TAG }}
+      
+      - name: Set the value
+        id: step_one
+        run: |
+            echo "FOO=$(git status)" >> $GITHUB_ENV
+      - name: Use the value
+        id: step_two
+        run: |
+            echo "${{ env.FOO }}"
         
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
