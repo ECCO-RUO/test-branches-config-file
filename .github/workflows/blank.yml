@@ -1,34 +1,33 @@
-name: Overwrite some file
-
+name: "CI"
 on:
   push:
-    branches: [ master ]
-  workflow_dispatch:
-
+  pull_request:
+    branches:
+      - master
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  image-analysis:
+    name: Analyze image
+    runs-on: ubuntu-18.04
+    permissions:
+      security-events: write
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      # creates JSON file job
-      - name: Create JSON file job
-        uses: schdck/create-env-json@v1
+      - name: Create grype configuration
+        run: |
+          cat <<EOF > $HOME/.grype.yaml
+          ignore:
+            # False positive, see https://github.com/anchore/grype/issues/558
+            - vulnerability: CVE-2015-5237
+              fix-state: unknown
+              package:
+                name: google.golang.org/protobuf
+                version: v1.26.0
+                type: go-module
+                location: "/manager"
+          EOF
+      - name: Scan operator image
+        uses: anchore/scan-action@v3
+        id: scan
         with:
-          file-name: 'testFile.txt'
-
-          # fill JSON with workflow data
-          Repository: ${{ github.event.repository.name }}
-          Branch: ${{ GITHUB.REF }}
-          DATE: "${{ STEPS.CURRENT-TIME.OUTPUTS.READABLETIME }}"
-          Project: ${{ GITHUB.REPOSITORY }}
-          Engineer: ${{ GITHUB.ACTOR }}
-          Server: ${{ RUNNER.OS }}
-    # GIT commands
-      - run: |
-          git config user.email "ruo@ecco.com";
-          git config user.name "ECCO-RUO"; 
-          git add .;
-          git commit -a -m "TXT created!";
-          git push -u origin master;
+          image: "qserv/qserv-operator:2022.1.1-rc1"
+          acs-report-enable: true
+          fail-build: false
