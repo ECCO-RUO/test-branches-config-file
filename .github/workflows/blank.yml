@@ -1,19 +1,29 @@
-name: "CI"
+name: Overwrite some file
+
 on:
   push:
-  pull_request:
-    branches:
-      - master
+    branches: [ master ]
+  workflow_dispatch:
+
 jobs:
-  image-analysis:
-    name: Analyze image
-    runs-on: ubuntu-18.04
-    permissions:
-      security-events: write
-    steps:            
-      - name: Get Release Info
-        uses: "finnp/create-file-action@master"
-        env:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Overwrite file
+        uses: "DamianReeves/write-file-action@master"
+        with:
+          path: file.txt
+          write-mode: overwrite
+          contents: |
+            console.log('some contents')
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
+        with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILE_NAME: "fileName.txt"
-          FILE_DATA: "file content"
+          branch: master
+          force: true
+          message: 'Overwritten by Github Actions - ${date}'
