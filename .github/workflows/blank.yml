@@ -27,4 +27,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: git ls-remote --tags --sort=committerdate | grep -o 'v.*' | sort -r | head -1
+        run: git tag -l v*
