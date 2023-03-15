@@ -1,1 +1,1 @@
-git tag --list | sort -V | tail -n1
+$TAG
