@@ -11,16 +11,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      
-      - name: Set the value
-        id: step_one
-        run: |
-            echo "FOO=$(git branch -a)" >> $GITHUB_ENV
-      - name: Use the value
-        id: step_two
-        run: |
-            echo "${{ env.FOO }}"
-        
+              
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
         with:
@@ -29,7 +20,7 @@ jobs:
           
           # name of the variable
           contents: |
-            $TAG
+            ${{ env.TAG_NAME }}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
