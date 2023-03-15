@@ -17,7 +17,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          route: GET /repos/ECCO-RUO/test-branches-config-file/tags/v0.0.5
+          route: GET /repos/ECCO-RUO/test-branches-config-file/tags/
 
       - name: Get Information from Release
         run: |
