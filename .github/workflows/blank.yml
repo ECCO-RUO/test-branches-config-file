@@ -12,16 +12,8 @@ jobs:
       security-events: write
     steps:            
       - name: Get Release Info
-        uses: octokit/request-action@v2.x
-        id: release
+        uses: "finnp/create-file-action@master"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          route: GET /repos/ECCO-RUO/test-branches-config-file/tags
-
-      - name: Get Information from Release
-        env:
-          DATA: ${{ steps.release.outputs.data }}
-        run: |
-          jq -r '.assets[].browser_download_url' <<<"$DATA" > assets.txt
-          jq -r '.body' <<<"$DATA" > changelog.txt
+          FILE_NAME: "dir/fileName.txt"
+          FILE_DATA: "file content"
