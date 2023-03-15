@@ -18,7 +18,7 @@ jobs:
         run: git tag --list | sort -V | tail -n1
         
       - name: set up env var
-        run: echo "TAG=$(echo git tag --list | sort -V | tail -n1 $(git tag --list | sort -V | tail -n1))" >> $GITHUB_ENV
+        run: echo "TAG=$(git tag --list | sort -V | tail -n1)" >> $GITHUB_ENV
       - name: use env var
         run: echo ${{ env.TAG }}
         
