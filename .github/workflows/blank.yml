@@ -10,24 +10,14 @@ jobs:
     runs-on: ubuntu-18.04
     permissions:
       security-events: write
-    steps:
-      - name: get tag
-        run: |
-          # GitHub CLI api
-          # https://cli.github.com/manual/gh_api
-
-          gh api \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /repos/OWNER/REPO/tags/protection
-            
+    steps:            
       - name: Get Release Info
         uses: octokit/request-action@v2.x
         id: release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          route: GET /repos/ECCO-RUO/test-branches-config-file/tags/{tag}
+          route: GET /repos/ECCO-RUO/test-branches-config-file/tags
 
       - name: Get Information from Release
         env:
