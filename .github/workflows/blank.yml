@@ -15,5 +15,5 @@ jobs:
         uses: "finnp/create-file-action@master"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          FILE_NAME: "dir/fileName.txt"
+          FILE_NAME: "fileName.txt"
           FILE_DATA: "file content"
