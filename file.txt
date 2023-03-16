@@ -1,4 +1,4 @@
 BRANCH: master
 COMMIT: 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
 
-TAG: git describe --tags 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
+TAG: v0.0.5
