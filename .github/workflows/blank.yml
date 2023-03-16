@@ -12,12 +12,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         
-      - name: Get tag
+      - name: Set CURRENT_BRANCH
         run: |
-          echo '::step-output name=CURRENT_TAG::(git ls-remote --tags --sort=committerdate | grep -o 'v.*' | sort -r | head -1)'
-          
-      - name: Use tag
-        run: echo ${{env.CURRENT_TAG}}
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+          echo "CURRENT_TAG=$(git ls-remote --tags --sort=committerdate | grep -o 'v.*' | sort -r | head -1)" >> $GITHUB_ENV
+      
+      - name: Get values
+        run: |
+          echo ${{ENV.CURRENT_BRANCH}}
+          echo ${{ENV_CURRENT_TAG}}
         
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
@@ -27,7 +30,8 @@ jobs:
           
           # name of the variable
           contents: |
-            ${{env.CURRENT_TAG}}
+            ${{ENV.CURRENT_BRANCH}}
+            ${{ENV.CURRENT_TAG}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
