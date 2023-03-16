@@ -14,7 +14,6 @@ jobs:
         
       - name: Set CURRENT_BRANCH
         run: |
-          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           echo "CURRENT_TAG=$(git tag --list | sort -V | tail -n1)" >> $GITHUB_ENV
                 
       - name: Get values
@@ -30,7 +29,6 @@ jobs:
           
           # name of the variable
           contents: |
-            ${{ENV.CURRENT_BRANCH}}
             ${{ENV.CURRENT_TAG}}
             
       - name: Commit & Push
