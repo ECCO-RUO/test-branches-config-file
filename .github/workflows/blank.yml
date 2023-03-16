@@ -22,6 +22,7 @@ jobs:
       - name: Get values
         run: |
           echo ${{ENV.CURRENT_BRANCH}}
+          echo ${{ENV.CURRENT_TAGGED_COMMIT}}
           echo ${{ENV.CURRENT_TAG}}
         
       - name: Overwrite file
@@ -33,6 +34,7 @@ jobs:
           # name of the variable
           contents: |
             BRANCH: ${{ENV.CURRENT_BRANCH}}
+            TAGGED_COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
             TAG: ${{ENV.CURRENT_TAG}}
             
       - name: Commit & Push
