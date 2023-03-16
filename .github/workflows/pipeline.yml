@@ -1,4 +1,4 @@
-name: Overwrite some file
+name: REPO DATA
 
 on:
   workflow_dispatch:
