@@ -2,7 +2,7 @@ name: Overwrite some file
 
 on:
   push:
-    branches: [ master, develop ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -14,8 +14,7 @@ jobs:
         
       - name: Set CURRENT_BRANCH
         run: |
-          git tag --sort=committerdate | grep -E '^v[0-9]' | tail -1
-          git tag  | grep -E '^v[0-9]' | sort -V | tail -1
+          git describe --tags --always
           
           
           
