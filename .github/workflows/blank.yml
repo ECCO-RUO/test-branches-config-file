@@ -14,7 +14,16 @@ jobs:
         
       - name: Set CURRENT_BRANCH
         run: |
-          git describe --tags --always
+          
+          git tag --sort=committerdate | grep -E '^v[0-9]' | tail -1
+          git tag --sort=taggerdate | tail -1
+          git tag  | grep -E '^v[0-9]' | sort -V | tail -1
+          git tag --list | sort -V | tail -n1
+          
+          git ls-remote --tags --sort=committerdate | grep -o 'v.*' | sort -r
+          
+          git describe --tags `git rev-list --tags --max-count=1`
+          git describe --tags 3c3311f
           
           
           
