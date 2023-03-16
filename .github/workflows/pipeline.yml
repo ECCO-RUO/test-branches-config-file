@@ -30,7 +30,7 @@ jobs:
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
         with:
-          path: file.txt
+          path: repo_data.txt
           write-mode: overwrite
           
           # name of the variable
