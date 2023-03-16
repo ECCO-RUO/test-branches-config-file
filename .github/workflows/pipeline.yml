@@ -1,8 +1,6 @@
 name: Overwrite some file
 
 on:
-  push:
-    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -20,25 +18,17 @@ jobs:
       
       - id: var
         run: echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
-                      
-      - name: Get values
-        run: |
-          echo ${{ENV.CURRENT_BRANCH}}
-          echo ${{ENV.CURRENT_TAGGED_COMMIT}}
-          echo ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
-        
-      - name: Overwrite file
+                              
+      - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
         with:
           path: repo_data.txt
           write-mode: overwrite
-          
-          # name of the variable
           contents: |
-            # REPO DATA
-            BRANCH: ${{ENV.CURRENT_BRANCH}}
-            COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
-            TAG: ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
+            - - - # # #  REPO DATA # # # - - -
+            * BRANCH: ${{ENV.CURRENT_BRANCH}}
+            * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
+            * TAG: ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
