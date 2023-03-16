@@ -11,15 +11,13 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
         
       - name: Set CURRENT_BRANCH
         run: |
-          git describe --tags --abbrev=0
           git describe --tags
+          git describe --tags --abbrev=0
           git tag --list | sort -V | tail -n1
           
-          echo git describe --tags `git rev-list --tags --max-count=1`
-          echo git describe --tags 3c3311f
+          git describe --tags `git rev-list --tags --max-count=1`
+          git describe --tags 3c3311f
           
