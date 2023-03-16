@@ -14,19 +14,17 @@ jobs:
       - run: git fetch --prune --unshallow
         
       - name: Set CURRENT_BRANCH
+        id: var
         run: |
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV
-      
-      - name: Set TAG
-        id: var
-        run: echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
-                
+          echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
+                      
       - name: Get values
         run: |
           echo ${{ENV.CURRENT_BRANCH}}
           echo ${{ENV.CURRENT_TAGGED_COMMIT}}
-          echo ${{ENV.CURRENT_TAG}}
+          echo ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
         
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
@@ -38,7 +36,6 @@ jobs:
           contents: |
             BRANCH: ${{ENV.CURRENT_BRANCH}}
             COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
-            
             TAG: ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
             
       - name: Commit & Push
