@@ -35,6 +35,7 @@ jobs:
           
           # name of the variable
           contents: |
+            # REPO DATA
             BRANCH: ${{ENV.CURRENT_BRANCH}}
             COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
             TAG: ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
