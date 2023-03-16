@@ -14,10 +14,13 @@ jobs:
       - run: git fetch --prune --unshallow
         
       - name: Set CURRENT_BRANCH
+        id: var
         run: |
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV
-          CURRENT_TAG=$(git describe --tags) >> $GITHUB_ENV
+          
+          echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_ENV
+          echo "::set-output name=prod_tag::${{${{ENV.CURRENT_TAGGED_COMMIT}}"
                 
       - name: Get values
         run: |
@@ -36,6 +39,7 @@ jobs:
             BRANCH: ${{ENV.CURRENT_BRANCH}}
             COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
             TAG: ${{ENV.CURRENT_TAG}}
+            prod_tag: ${{steps.var.outputs.prod_tag}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
