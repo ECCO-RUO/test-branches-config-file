@@ -14,9 +14,7 @@ jobs:
         
       - name: Set CURRENT_BRANCH
         run: |
-          git describe --tags --abbrev=0
-          git describe --tags
-          git tag --list | sort -V | tail -n1
+          
           
           echo "COMMIT: " git describe --tags `git rev-list --tags --max-count=1`
           echo "TAG: " git describe --tags 3c3311f
