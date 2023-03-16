@@ -20,7 +20,7 @@ jobs:
       
       - name: Set TAG
         id: var
-        run: echo "::set-output name=CURRENT_TAG::git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}}"
+        run: echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
                 
       - name: Get values
         run: |
