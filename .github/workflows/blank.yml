@@ -11,21 +11,33 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-        
       - run: git fetch --prune --unshallow
         
       - name: Set CURRENT_BRANCH
         run: |
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+          echo "CURRENT_TAG=$(git tag --list | sort -V | tail -n1)" >> $GITHUB_ENV
+                
+      - name: Get values
+        run: |
+          echo ${{ENV.CURRENT_BRANCH}}
+          echo ${{ENV.CURRENT_TAG}}
+        
+      - name: Overwrite file
+        uses: "DamianReeves/write-file-action@master"            
+        with:
+          path: file.txt
+          write-mode: overwrite
           
-          git tag --sort=committerdate | grep -E '^v[0-9]' | tail -1
-          git tag --sort=taggerdate | tail -1
-          git tag  | grep -E '^v[0-9]' | sort -V | tail -1
-          git tag --list | sort -V | tail -n1
-          
-          git ls-remote --tags --sort=committerdate | grep -o 'v.*' | sort -r
-          
-          git describe --tags `git rev-list --tags --max-count=1`
-          git describe --tags 3c3311f
-          
-          
-          
+          # name of the variable
+          contents: |
+            ${{ENV.CURRENT_BRANCH}}
+            ${{ENV.CURRENT_TAG}}
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
+          force: true
+          message: 'Overwritten by Github Actions'
