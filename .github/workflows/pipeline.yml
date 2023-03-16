@@ -1,0 +1,39 @@
+name: Overwrite some file
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - run: git fetch --prune --unshallow
+        
+      - name: Set CURRENT_BRANCH
+        run: |
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV
+      
+      - id: var
+        run: echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
+                              
+      - name: Write TXT file
+        uses: "DamianReeves/write-file-action@master"            
+        with:
+          path: repo_data.txt
+          write-mode: overwrite
+          contents: |
+            - - - # # #  REPO DATA # # # - - -
+            * BRANCH: ${{ENV.CURRENT_BRANCH}}
+            * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
+            * TAG: ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          branch: master
+          force: true
+          message: 'Overwritten by Github Actions'
