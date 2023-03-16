@@ -15,14 +15,8 @@ jobs:
       - name: Set CURRENT_BRANCH
         run: |
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-          echo "CURRENT_TAG=$(git ls-remote --tags --sort=committerdate | grep -o 'v.*' | sort -r | head -1)" >> $GITHUB_ENV
-          
-      - name: Use action
-        id: get-branch
-        uses: ypicard/get-branch-name-github-action@v1
-      - name: Echo outpus
-        run: echo "name=${{ steps.get-branch.outputs.branch }} - tag=${{ steps.get-branch.outputs.tag }}"
-      
+          echo "CURRENT_TAG=$(git tag --list | sort -V | tail -n1)" >> $GITHUB_ENV
+                
       - name: Get values
         run: |
           echo ${{ENV.CURRENT_BRANCH}}
