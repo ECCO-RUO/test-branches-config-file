@@ -9,15 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Set output
-        id: vars
-        run: echo "GIT_TAG=`echo $(git describe --tags --abbrev=0)`" >> $GITHUB_ENV
+      - name: Checkout repo
+        uses: actions/checkout@v3
         
-      - name: Check output
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.GIT_TAG }}
+      - name: Set CURRENT_BRANCH
         run: |
-          echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
+          git describe --tags --abbrev=0
+          git describe --tags
+          git tag --list | sort -V | tail -n1
+          
+          echo "COMMIT: " git describe --tags `git rev-list --tags --max-count=1`
+          echo "TAG: " git describe --tags 3c3311f
+          
