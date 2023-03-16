@@ -17,7 +17,7 @@ jobs:
         run: |
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV
-          echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_ENV
+          echo "CURRENT_TAG=$(git describe --tags) ${{ENV.CURRENT_TAGGED_COMMIT}}" >> $GITHUB_ENV
           echo "TAG_TAG=$(git describe --tags 3c3311f21fdc4c69aac07386d714d5d4173b1f9d)" >> $GITHUB_ENV
                 
       - name: Get values
