@@ -20,7 +20,7 @@ jobs:
       - name: Get values
         run: |
           echo ${{ENV.CURRENT_BRANCH}}
-          echo ${{ENV_CURRENT_TAG}}
+          echo ${{ENV.CURRENT_TAG}}
         
       - name: Overwrite file
         uses: "DamianReeves/write-file-action@master"            
