@@ -15,6 +15,9 @@ jobs:
         run: |
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV
+          
+          echo "CURRENT_TAGGED_COMMIT_FROM_GITHUB_OUTPUT=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+          echo "CURRENT_GITHUB_OUTPUT=$(GITHUB_OUTPUT)" >> $GITHUB_OUTPUT
       
       - id: var
         run: echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
@@ -29,6 +32,8 @@ jobs:
             * BRANCH: ${{ENV.CURRENT_BRANCH}}
             * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
             * TAG: ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
+            * CURRENT_TAGGED_COMMIT_FROM_GITHUB_OUTPUT: ${{STEPS.OUTPUTS.CURRENT_TAGGED_COMMIT_FROM_GITHUB_OUTPUT}}
+            * CURRENT_GITHUB_OUTPUT: ${{STEPS.OUTPUTS.CURRENT_GITHUB_OUTPUT}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
