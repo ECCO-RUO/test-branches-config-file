@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      - run: git fetch --prune --unshallow
+      
         
       - name: Set CURRENT_BRANCH
         id: vars
@@ -17,6 +17,10 @@ jobs:
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
           echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+          
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV          
+          echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_ENV
                               
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
@@ -28,6 +32,10 @@ jobs:
             * BRANCH: ${{STEPS.VARS.OUTPUTS.CURRENT_BRANCH}}
             * COMMIT: ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}}
             * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
+            ////////////////////////////////////////////////
+            * BRANCH: ${{ENV.CURRENT_BRANCH}}
+            * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
+            * TAG: ${{ENV.CURRENT_TAG}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
