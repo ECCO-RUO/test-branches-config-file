@@ -1,9 +1,9 @@
 - - - # # #  REPO DATA # # # - - -
 * BRANCH: master
-* COMMIT: 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
-* TAG: v0.0.5-182-gc1976fc
+* COMMIT: 32ff313bf6be9092b9e00293aef2ab9b046c5bda
+* TAG: v0.0.8-45-gea8b4c7
 
 ////////////////// VARS_2 //////////////////////////////
 * CURRENT_BRANCH2: master
-* CURRENT_TAGGED_COMMIT2: 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
-* CURRENT_TAG2: v0.0.5-182-gc1976fc
+* CURRENT_TAGGED_COMMIT2: 32ff313bf6be9092b9e00293aef2ab9b046c5bda
+* CURRENT_TAG2: v0.0.8-45-gea8b4c7
