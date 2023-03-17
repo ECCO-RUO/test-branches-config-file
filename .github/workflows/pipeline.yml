@@ -23,7 +23,7 @@ jobs:
       - name: setvar
         id: v
         run: |
-          echo '::set-output name=newTAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})' >> $GITHUB_OUTPUT
+          echo "::set-output name=newTAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
           
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
