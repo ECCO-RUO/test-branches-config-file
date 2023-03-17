@@ -1,6 +1,9 @@
 name: REPO DATA
 
 on:
+  push:
+    branches: [ master ]
+    
   workflow_dispatch:
 
 jobs:
