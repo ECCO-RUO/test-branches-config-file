@@ -10,32 +10,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      - run: git fetch --prune --unshallow
-        
-      - name: Set VARS
-        id: vars
+      - uses: little-core-labs/get-git-tag@v3.0.1
+        id: tagName
+        with:
+          tagRegex: "foobar-(.*)"  # Optional. Returns specified group text as tag name. Full tag string is returned if regex is not defined.
+          tagRegexGroup: 1 # Optional. Default is 1.
+      - name: Some other step # Output usage example
+        with:
+          tagname: ${{ steps.tagName.outputs.tag }}
+      - name: Yet another step # Environment variabl usage example
         run: |
-          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
-          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
-          echo "CURRENT_TAG=$(git describe --tags  ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
-                                        
-      - name: Write TXT file
-        uses: "DamianReeves/write-file-action@master"            
-        with:
-          path: repo_data.txt
-          write-mode: overwrite
-          contents: |
-            - - - # # #  REPO DATA # # # - - -
-            * BRANCH: ${{STEPS.VARS.OUTPUTS.CURRENT_BRANCH}}
-            * COMMIT: ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}}
-            * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
-            
-      - name: Commit & Push
-        uses: Andro999b/push@v1.3
-        with:
-          GITHUB_TOKEN: ${{SECRETS.GITHUB_TOKEN}}
-          branch: master
-          force: true
-          message: 'Overwritten by Github Actions'
+          docker build . --file Dockerfile --tag docker.pkg.github.com/someimage:$GIT_TAG_NAME
