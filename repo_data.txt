@@ -1,7 +1,8 @@
 - - - # # #  REPO DATA # # # - - -
-* BRANCH: 
+* BRANCH: master
 * COMMIT: 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
-* TAG: v0.0.5-160-gcfc1b65
+* TAG: v0.0.5-162-gc2944f4
 
-* ENV_TAGGED_COMMIT: 
-* ENV_VAR:
+* SELECTED_COLOR: green
+* ENV_TAGGED_COMMIT: v0.0.5-162-gc2944f4
+* ENV_VAR: GITHUB_OUTPUT
