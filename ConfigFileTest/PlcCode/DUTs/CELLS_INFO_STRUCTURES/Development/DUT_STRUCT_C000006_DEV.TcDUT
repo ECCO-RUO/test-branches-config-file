@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="DUT_STRUCT_C000006_DEV" Id="{b4fc3a89-2a2f-4688-b120-f9a5ebc1bd97}">
+    <Declaration><![CDATA[TYPE DUT_STRUCT_C000006_DEV :
+STRUCT
+	sCellName			:STRING := 'C000006';
+	sIpAddress			:STRING := '';
+	sAmsNetId			:STRING := '';
+	sOpcUaURL			:STRING := 'opc.tcp://:4840';
+	sStation1			:STRING := 'S000002';
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

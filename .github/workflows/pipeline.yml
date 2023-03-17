@@ -1,0 +1,41 @@
+name: REPO DATA
+
+on:
+  push:
+    branches: [ master ]
+    
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - run: git fetch --prune --unshallow
+        
+      - name: Set VARS
+        id: vars
+        run: |
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
+          echo "CURRENT_TAG=$(git describe --tags ${{steps.vars.outputs.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+                                        
+      - name: Write TXT file
+        uses: "DamianReeves/write-file-action@master"            
+        with:
+          path: repo_data.txt
+          write-mode: overwrite
+          contents: |
+            - - - # # #  REPO DATA # # # - - -
+            * BRANCH: ${{steps.vars.outputs.CURRENT_BRANCH}}
+            * COMMIT: ${{steps.vars.outputs.CURRENT_TAGGED_COMMIT}}
+            * TAG: ${{steps.vars.outputs.CURRENT_TAG}}
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
+        with:
+          GITHUB_TOKEN: ${{SECRETS.GITHUB_TOKEN}}
+          branch: master
+          force: true
+          message: 'Overwritten by Github Actions'

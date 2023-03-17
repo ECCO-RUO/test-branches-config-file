@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <DUT Name="DUT_STRUCT_LINECONTROLLER_DEV" Id="{454182ee-a47c-4997-a45f-4aefdcc44a9b}">
+    <Declaration><![CDATA[TYPE DUT_STRUCT_LINECONTROLLER_DEV :
+STRUCT
+	sCellName			:STRING := 'LINECONTROLLER';
+	sIpAddress			:STRING := '10.155.180.8';
+	sAmsNetId			:STRING := '';
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>
