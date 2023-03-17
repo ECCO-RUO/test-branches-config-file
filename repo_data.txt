@@ -1,9 +1,9 @@
 - - - # # #  REPO DATA # # # - - -
 * BRANCH: master
-* COMMIT: 
-* TAG: 
+* COMMIT: 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
+* TAG: v0.0.5-179-ga250c00
 
 ////////////////// VARS_2 //////////////////////////////
 * CURRENT_BRANCH2: master
-* CURRENT_TAGGED_COMMIT2: 
-* CURRENT_TAG2:
+* CURRENT_TAGGED_COMMIT2: 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
+* CURRENT_TAG2: v0.0.5-179-ga250c00
