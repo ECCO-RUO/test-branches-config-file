@@ -15,7 +15,8 @@ jobs:
         uses: actions/checkout@v3
       - run: git fetch --prune --unshallow
         
-      - uses: little-core-labs/get-git-tag@v3.0.1
+      - name: asd
+        uses: little-core-labs/get-git-tag@v3.0.1
         id: tagName
         with:
           tagRegex: "foobar-(.*)"  # Optional. Returns specified group text as tag name. Full tag string is returned if regex is not defined.
