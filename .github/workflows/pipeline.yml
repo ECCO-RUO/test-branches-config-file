@@ -20,6 +20,11 @@ jobs:
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV          
           echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_ENV
           
+      - name: setvar
+        id: v
+        run: |
+          echo '::set-output name=newTAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})' >> $GITHUB_OUTPUT
+          
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
         with:
@@ -30,5 +35,7 @@ jobs:
             * BRANCH: ${{ENV.CURRENT_BRANCH}}
             * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
             * TAG: ${{ENV.CURRENT_TAG}}
+            
+            newTAG: ${{STEPS.V.OUTPUTS.newTAG}}
             
             
