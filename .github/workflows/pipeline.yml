@@ -25,7 +25,7 @@ jobs:
         run: |
           echo "CURRENT_BRANCH2=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
           echo "CURRENT_TAGGED_COMMIT2=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
-          echo "CURRENT_TAG2=$(git describe --tags ${{STEPS.VARS2.OUTPUTS.CURRENT_TAGGED_COMMIT2}})" >> $GITHUB_OUTPUT
+          echo "::set-output name=CURRENT_TAG2::$(git describe --tags ${{STEPS.VARS2.OUTPUTS.CURRENT_TAGGED_COMMIT2}})"
                               
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
