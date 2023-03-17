@@ -15,12 +15,8 @@ jobs:
         id: vars
         run: |
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
-          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT
-          echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
-          
-          echo "SELECTED_COLOR=green" >> $GITHUB_OUTPUT
-          echo "ENV_TAGGED_COMMIT=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
-          echo "ENV_VAR=GITHUB_OUTPUT" >> $GITHUB_OUTPUT
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
+          echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
                               
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
@@ -32,10 +28,6 @@ jobs:
             * BRANCH: ${{STEPS.VARS.OUTPUTS.CURRENT_BRANCH}}
             * COMMIT: ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}}
             * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
-           
-            * SELECTED_COLOR: ${{STEPS.VARS.OUTPUTS.SELECTED_COLOR}}
-            * ENV_TAGGED_COMMIT: ${{STEPS.VARS.OUTPUTS.ENV_TAGGED_COMMIT}}
-            * ENV_VAR: ${{STEPS.VARS.OUTPUTS.ENV_VAR}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
