@@ -5,5 +5,5 @@
 
 ////////////////// VARS_2 //////////////////////////////
 * CURRENT_BRANCH2: master
-* CURRENT_TAGGED_COMMIT2: 3c3311f21fdc4c69aac07386d714d5d4173b1f9d
-* CURRENT_TAG2: v0.0.5-173-g329ee33
+* CURRENT_TAGGED_COMMIT2: 
+* CURRENT_TAG2:
