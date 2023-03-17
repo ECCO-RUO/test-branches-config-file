@@ -12,7 +12,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      
+        
+      - run: git fetch --prune --unshallow
         
       - name: Set CURRENT_BRANCH
         id: vars
