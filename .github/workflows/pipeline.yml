@@ -1,29 +1,31 @@
+name: Tests
 
-name: REPO DATA
+on: [push]
 
-on:
-  push:
-    branches: [ master ]
-    
-  workflow_dispatch:
+env:
+  login: l12s-bot
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-      - run: git fetch --prune --unshallow
-        
-      - name: asd
-        uses: little-core-labs/get-git-tag@v3.0.1
-        id: tagName
-        with:
-          tagRegex: "foobar-(.*)"  # Optional. Returns specified group text as tag name. Full tag string is returned if regex is not defined.
-          tagRegexGroup: 1 # Optional. Default is 1.
-      - name: Some other step # Output usage example
-        with:
-          tagname: ${{ steps.tagName.outputs.tag }}
-      - name: Yet another step # Environment variabl usage example
-        run: |
-          docker build . --file Dockerfile --tag docker.pkg.github.com/someimage:$GIT_TAG_NAME
+    - uses: actions/checkout@v2.3.4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2.1.2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      run: |
+        npm i
+        npm test
+    - name: Get tag name
+      uses: little-core-labs/get-git-tag@master
+      id: tag_name
+    - name: Look at results
+      run: echo ${{ steps.tag_name.outputs.tag }}
