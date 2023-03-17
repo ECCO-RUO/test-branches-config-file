@@ -29,12 +29,13 @@ jobs:
           write-mode: overwrite
           contents: |
             - - - # # #  REPO DATA # # # - - -
-            * BRANCH: ${{STEPS.VARS.OUTPUTSCURRENT_BRANCH}}
+            * BRANCH: ${{STEPS.VARS.OUTPUTS.CURRENT_BRANCH}}
             * COMMIT: ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}}
             * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
            
-            * ENV_TAGGED_COMMIT: ${{STEPS.VARS.OUTPUTS.GITHUB_ENV_TAGGED_COMMIT}}
-            * ENV_VAR: ${{STEPS.VARS.OUTPUTS.GITHUB_ENV_VAR}}
+            * SELECTED_COLOR: ${{STEPS.VARS.OUTPUTS.SELECTED_COLOR}}
+            * ENV_TAGGED_COMMIT: ${{STEPS.VARS.OUTPUTS.ENV_TAGGED_COMMIT}}
+            * ENV_VAR: ${{STEPS.VARS.OUTPUTS.ENV_VAR}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
