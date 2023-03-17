@@ -12,15 +12,15 @@ jobs:
       - run: git fetch --prune --unshallow
         
       - name: Set CURRENT_BRANCH
+        id: vars
         run: |
-          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT
           
-          echo "CURRENT_TAGGED_COMMIT_FROM_GITHUB_OUTPUT=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
-          echo "CURRENT_GITHUB_OUTPUT=$(GITHUB_OUTPUT)" >> $GITHUB_OUTPUT
-      
-      - id: var
-        run: echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
+          echo "GITHUB_ENV_TAGGED_COMMIT=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+          echo "GITHUB_ENV_VAR=GITHUB_OUTPUT" >> $GITHUB_OUTPUT
+          
+          echo "::set-output name=CURRENT_TAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
                               
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
@@ -29,11 +29,11 @@ jobs:
           write-mode: overwrite
           contents: |
             - - - # # #  REPO DATA # # # - - -
-            * BRANCH: ${{ENV.CURRENT_BRANCH}}
-            * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
-            * TAG: ${{STEPS.VAR.OUTPUTS.CURRENT_TAG}}
-            * CURRENT_TAGGED_COMMIT_FROM_GITHUB_OUTPUT: ${{STEPS.OUTPUTS.CURRENT_TAGGED_COMMIT_FROM_GITHUB_OUTPUT}}
-            * CURRENT_GITHUB_OUTPUT: ${{STEPS.OUTPUTS.CURRENT_GITHUB_OUTPUT}}
+            * BRANCH: ${{steps.vars.outputs.CURRENT_BRANCH}}
+            * COMMIT: ${{steps.vars.outputs.CURRENT_TAGGED_COMMIT}}
+            * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
+            * CURRENT_TAGGED_COMMIT_FROM_GITHUB_OUTPUT: ${{steps.vars.outputs.GITHUB_ENV_TAGGED_COMMIT}}
+            * CURRENT_GITHUB_OUTPUT: ${{steps.vars.outputs.GITHUB_ENV_VAR}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
