@@ -23,11 +23,7 @@ jobs:
       - name: setvar
         id: v
         run: |
-          echo "::set-output name=newTAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
-          
-      - name: Set output
-        id: stepid
-        run: echo "::set-output name=count::5"
+          echo "::set-output name=newTAG::$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})"
           
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
@@ -41,6 +37,5 @@ jobs:
             * TAG: ${{ENV.CURRENT_TAG}}
             
             newTAG: ${{STEPS.V.OUTPUTS.newTAG}}
-            value: ${{ steps.stepid.outputs.count }}
             
             
