@@ -15,18 +15,12 @@ jobs:
       - run: git fetch --prune --unshallow
         
       - name: Set VARS
+        id: vars
         run: |
-          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV          
-          echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_ENV
-          
-      - name: Set VARS_2
-        id: vars2
-        run: |
-          echo "CURRENT_BRANCH2=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
-          echo "CURRENT_TAGGED_COMMIT2=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
-          echo "::set-output name=CURRENT_TAG2::$(git describe --tags ${{STEPS.VARS2.OUTPUTS.CURRENT_TAGGED_COMMIT2}})"
-                              
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
+          echo "CURRENT_TAG=$(git describe --tags ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+                                        
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
         with:
@@ -34,14 +28,9 @@ jobs:
           write-mode: overwrite
           contents: |
             - - - # # #  REPO DATA # # # - - -
-            * BRANCH: ${{ENV.CURRENT_BRANCH}}
-            * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT}}
-            * TAG: ${{ENV.CURRENT_TAG}}
-            
-            ////////////////// VARS_2 //////////////////////////////
-            * CURRENT_BRANCH2: ${{STEPS.VARS2.OUTPUTS.CURRENT_BRANCH2}}
-            * CURRENT_TAGGED_COMMIT2: ${{STEPS.VARS2.OUTPUTS.CURRENT_TAGGED_COMMIT2}}
-            * CURRENT_TAG2: ${{STEPS.VARS2.OUTPUTS.CURRENT_TAG2}}
+            * BRANCH: ${{STEPS.VARS.OUTPUTS.CURRENT_BRANCH}}
+            * COMMIT: ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}}
+            * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
