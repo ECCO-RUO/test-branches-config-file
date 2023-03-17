@@ -1,31 +1,42 @@
-name: Tests
 
-on: [push]
+name: REPO DATA
 
-env:
-  login: l12s-bot
+on:
+  push:
+    branches: [ master ]
+    
+  workflow_dispatch:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
-    - uses: actions/checkout@v2.3.4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2.1.2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm i
-        npm test
-    - name: Get tag name
-      uses: little-core-labs/get-git-tag@master
-      id: tag_name
-    - name: Look at results
-      run: echo ${{ steps.tag_name.outputs.tag }}
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - run: git fetch --prune --unshallow
+        
+      - name: Set VARS
+        id: vars
+        run: |
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
+          echo "CURRENT_TAG=$(git describe --tags  ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+                                        
+      - name: Write TXT file
+        uses: "DamianReeves/write-file-action@master"            
+        with:
+          path: repo_data.txt
+          write-mode: overwrite
+          contents: |
+            - - - # # #  REPO DATA # # # - - -
+            * BRANCH: ${{STEPS.VARS.OUTPUTS.CURRENT_BRANCH}}
+            * COMMIT: ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}}
+            * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
+            
+      - name: Commit & Push
+        uses: Andro999b/push@v1.3
+        with:
+          GITHUB_TOKEN: ${{SECRETS.GITHUB_TOKEN}}
+          branch: master
+          force: true
+          message: 'Overwritten by Github Actions'
