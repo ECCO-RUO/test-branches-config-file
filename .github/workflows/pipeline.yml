@@ -21,7 +21,7 @@ jobs:
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
           echo "CURRENT_TAG=$(git describe --tags ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
           
-          echo "CURRENT_TAG2=$(git describe --contains ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+          echo "CURRENT_TAG2=$(git describe --tags --exact-match ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
           echo "CURRENT_TAG3=$(git tag --points-at ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
           
       - name: Write TXT file
