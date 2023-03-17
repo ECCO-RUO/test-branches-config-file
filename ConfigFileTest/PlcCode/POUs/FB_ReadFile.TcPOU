@@ -28,10 +28,8 @@ VAR
 	
 	// split string
 	aSplit					:ARRAY[0..cMax] OF STRING(255);
-//	aSplit					:DUT_STRUCT_VARIABLES;
 	bResultSplit			:BOOL;
 	ii						:UDINT;
-	j						:UDINT;
 END_VAR
 VAR CONSTANT
 	cStepInit				:INT := 0;
