@@ -20,10 +20,8 @@ jobs:
           echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
           echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
           echo "CURRENT_TAG=$(git describe --tags ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
-          
-          echo "CURRENT_TAG2=$(git describe --tags --exact-match ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
-          echo "CURRENT_TAG3=$(git tag --points-at ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
-          
+          echo "CURRENT_TAG2=$(git describe --tags 32ff313bf6be9092b9e00293aef2ab9b046c5bda)" >> $GITHUB_OUTPUT
+                    
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
         with:
@@ -36,6 +34,5 @@ jobs:
             * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
             
             * TAG2: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG2}}
-            * TAG3: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG3}}
             
             
