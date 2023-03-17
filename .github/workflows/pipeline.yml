@@ -23,7 +23,7 @@ jobs:
           
           echo "CURRENT_BRANCH2=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
           echo "CURRENT_TAGGED_COMMIT2=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV          
-          echo "CURRENT_TAG2=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_ENV
+          echo "CURRENT_TAG2=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT2}})" >> $GITHUB_ENV
                               
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
