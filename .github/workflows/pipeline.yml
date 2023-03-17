@@ -15,16 +15,18 @@ jobs:
         
       - run: git fetch --prune --unshallow
         
-      - name: Set CURRENT_BRANCH
-        id: vars
+      - name: Set VARS
         run: |
-          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
-          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
-          echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_OUTPUT
+          echo "CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
+          echo "CURRENT_TAGGED_COMMIT=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV          
+          echo "CURRENT_TAG=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT}})" >> $GITHUB_ENV
           
-          echo "CURRENT_BRANCH2=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_ENV
-          echo "CURRENT_TAGGED_COMMIT2=$(git rev-list --tags --max-count=1)" >> $GITHUB_ENV          
-          echo "CURRENT_TAG2=$(git describe --tags ${{ENV.CURRENT_TAGGED_COMMIT2}})" >> $GITHUB_ENV
+      - name: Set VARS_2
+        id: vars2
+        run: |
+          echo "CURRENT_BRANCH2=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
+          echo "CURRENT_TAGGED_COMMIT2=$(git rev-list --tags --max-count=1)" >> $GITHUB_OUTPUT          
+          echo "CURRENT_TAG2=$(git describe --tags ${{STEPS.VARS2.OUTPUTS.CURRENT_TAGGED_COMMIT2}})" >> $GITHUB_OUTPUT
                               
       - name: Write TXT file
         uses: "DamianReeves/write-file-action@master"            
@@ -36,10 +38,11 @@ jobs:
             * BRANCH: ${{STEPS.VARS.OUTPUTS.CURRENT_BRANCH}}
             * COMMIT: ${{STEPS.VARS.OUTPUTS.CURRENT_TAGGED_COMMIT}}
             * TAG: ${{STEPS.VARS.OUTPUTS.CURRENT_TAG}}
-            ////////////////////////////////////////////////
-            * BRANCH: ${{ENV.CURRENT_BRANCH2}}
-            * COMMIT: ${{ENV.CURRENT_TAGGED_COMMIT2}}
-            * TAG: ${{ENV.CURRENT_TAG2}}
+            
+            ////////////////// VARS_2 //////////////////////////////
+            * CURRENT_BRANCH2: ${{STEPS.VARS2.OUTPUTS.CURRENT_BRANCH2}}
+            * CURRENT_TAGGED_COMMIT2: ${{STEPS.VARS2.OUTPUTS.CURRENT_TAGGED_COMMIT2}}
+            * CURRENT_TAG2: ${{STEPS.VARS2.OUTPUTS.CURRENT_TAG2}}
             
       - name: Commit & Push
         uses: Andro999b/push@v1.3
