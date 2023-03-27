@@ -3,8 +3,11 @@
   <GVL Name="GVL" Id="{0555a834-3236-40ff-bc2a-e0a7a0670f20}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
-	sString				:ARRAY[0..15] OF STRING(255);
-	sVars				:DUT_STRUCT_VARIABLES;
+	
+	// vars for JSON & HTTP GET response
+	sString						:ARRAY[0..15] OF STRING(255);
+	jsonFileResult 				:STRING(501);
+	sVars						:DUT_STRUCT_VARIABLES;
 	
 	// cells info for PRODUCTION
 	C000000_PROD				:DUT_STRUCT_C000000_PROD;

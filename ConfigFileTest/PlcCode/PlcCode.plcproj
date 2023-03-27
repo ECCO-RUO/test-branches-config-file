@@ -104,6 +104,9 @@
     <Compile Include="DUTs\DUT_STRUCT_VARIABLES.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\ST_ReceivedData.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GVLs\GVL.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -114,7 +117,7 @@
     <Compile Include="POUs\FB_ReadFile.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\FB_TestHTTP_Get_openWeatherMap.TcPOU">
+    <Compile Include="POUs\FB_HttpGet.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="POUs\MAIN.TcPOU">

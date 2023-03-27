@@ -4,38 +4,36 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	// develop branch
-	fbReadFile			:FB_ReadFile;
-	
-    // trigger command execution for OpenWeatherMap samples
-    bGetOpenWeatherMap             : BOOL;
+	fbReadFile					:FB_ReadFile;
+	bHttpGet					:BOOL;
 
-    fbHttpClientOpenWeatherMap     : FB_IotHttpClient :=(sHostName:='api.github.com',
-                                     bKeepAlive:=TRUE, tConnectionTimeout:=T#10S);
-
-    fbHttpGetOpenWeatherMap        : FB_TestHTTP_Get_openWeatherMap;
-END_VAR]]></Declaration>
+    fbHttpClient				:FB_IotHttpClient :=(sHostName:='api.github.com', bKeepAlive:=TRUE, tConnectionTimeout:=T#10S);
+    fbHttpGetOpen				:FB_HttpGet;
+END_VAR
+]]></Declaration>
     <Implementation>
-      <ST><![CDATA[//fbReadFile();
+      <ST><![CDATA[fbReadFile();
 
 // test HTTP GET request
-//init client parameters at startup
-IF NOT fbHttpClientOpenWeatherMap.bConfigured THEN
-    fbHttpClientOpenWeatherMap.nHostPort:= 443;
-    fbHttpClientOpenWeatherMap.stTLS.bNoServerCertCheck:= TRUE;
+IF NOT fbHttpClient.bConfigured THEN
+    fbHttpClient.nHostPort:= 443;
+    fbHttpClient.stTLS.bNoServerCertCheck:= TRUE;
 END_IF
 
-IF fbHttpClientOpenWeatherMap.bConfigured THEN
-    fbHttpGetOpenWeatherMap(bSend:=bGetOpenWeatherMap, fbClient:=fbHttpClientOpenWeatherMap);
+IF fbHttpClient.bConfigured THEN
+    fbHttpGetOpen(bSend:=bHttpGet, fbClient:=fbHttpClient);
 END_IF
 
-fbHttpClientOpenWeatherMap.Execute();]]></ST>
+fbHttpClient.Execute();
+]]></ST>
     </Implementation>
     <LineIds Name="MAIN">
-      <LineId Id="1049" Count="0" />
+      <LineId Id="1194" Count="0" />
       <LineId Id="1056" Count="0" />
       <LineId Id="1055" Count="0" />
-      <LineId Id="1058" Count="9" />
-      <LineId Id="1057" Count="0" />
+      <LineId Id="1059" Count="8" />
+      <LineId Id="1120" Count="0" />
+      <LineId Id="1245" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
