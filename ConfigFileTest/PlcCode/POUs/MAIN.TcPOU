@@ -2,26 +2,27 @@
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
   <POU Name="MAIN" Id="{d70c0d43-1e12-4f89-90c8-3d2f54cc3033}" SpecialFunc="None">
     <Declaration><![CDATA[PROGRAM MAIN
+
 VAR
 	// develop branch
 	fbReadFile					:FB_ReadFile;
 	bHttpGet					:BOOL;
 
-    fbHttpClient				:FB_IotHttpClient :=(sHostName:='api.github.com', bKeepAlive:=TRUE, tConnectionTimeout:=T#10S);
+    fbHttpClient				:FB_IotHttpClient := (sHostName:='api.github.com', bKeepAlive:=TRUE, tConnectionTimeout:=T#10S);
     fbHttpGetOpen				:FB_HttpGet;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[fbReadFile();
 
-// test HTTP GET request
+// HTTP GET request
 IF NOT fbHttpClient.bConfigured THEN
-    fbHttpClient.nHostPort:= 443;
-    fbHttpClient.stTLS.bNoServerCertCheck:= TRUE;
+    fbHttpClient.nHostPort := 443;
+    fbHttpClient.stTLS.bNoServerCertCheck := TRUE;
 END_IF
 
 IF fbHttpClient.bConfigured THEN
-    fbHttpGetOpen(bSend:=bHttpGet, fbClient:=fbHttpClient);
+    fbHttpGetOpen(bSend := bHttpGet, fbClient := fbHttpClient);
 END_IF
 
 fbHttpClient.Execute();

@@ -31,6 +31,7 @@ VAR
 	bResultSplit			:BOOL;
 	ii						:UDINT;
 END_VAR
+
 VAR CONSTANT
 	cStepInit				:INT := 0;
 	cStepOpenFile			:INT := 10;
@@ -110,7 +111,7 @@ END_VAR
 		END_IF
 		
 		cStepEOFCheck:
-				fbFileGet(bExecute:=FALSE);
+				fbFileGet(bExecute := FALSE);
 		IF bEOF THEN
 			iStep := cStepCloseFile;
 		ELSE
@@ -140,9 +141,6 @@ END_VAR
 			IF fbFileGet.bEOF THEN
 				iStep := cStepCloseFile;
 			ELSE
-				// GVL.sString[nRow] := sBufferString[0];
-				
-//				GVL.sString[nRow] := GVL.jsonFile;
 				nRow := nRow + 1;
 				iStep := cStepGetLine;
 			END_IF
@@ -154,7 +152,7 @@ END_VAR
 					iStep := cStepError;	
 				END_IF
 			ELSE
-				fbFileClose(bExecute:=FALSE);
+				fbFileClose(bExecute := FALSE);
 				iStep := cStepInit;
 			END_IF
 			
@@ -200,8 +198,8 @@ END_FOR
 	]]></ST>
     </Implementation>
     <LineIds Name="FB_ReadFile">
-      <LineId Id="843" Count="93" />
-      <LineId Id="1223" Count="1" />
+      <LineId Id="843" Count="91" />
+      <LineId Id="1224" Count="0" />
       <LineId Id="937" Count="30" />
       <LineId Id="1032" Count="0" />
       <LineId Id="968" Count="9" />
