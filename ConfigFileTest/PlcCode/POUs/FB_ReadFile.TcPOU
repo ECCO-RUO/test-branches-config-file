@@ -10,7 +10,7 @@ VAR
 	fbFileClose				:FB_FileClose;
 	
 	sPathName				:STRING := 'C:\RUO folder\Configuration file branches TEST\';
-	sFileName				:STRING := 'test-branches-config-file\config';
+	sFileName				:STRING := 'NEW TEST\test-branches-config-file\config';
 	sConfigPathFile			:STRING(300) := CONCAT(sPathName, sFileName);
 	
 	bReset					:BOOL;
@@ -27,11 +27,10 @@ VAR
 	iCRLFCounter			:INT;
 	
 	// split string
-	aSplit					:ARRAY[0..cMax] OF STRING(501);
+	aSplit					:ARRAY[0..cMax] OF STRING(255);
 	bResultSplit			:BOOL;
 	ii						:UDINT;
 END_VAR
-
 VAR CONSTANT
 	cStepInit				:INT := 0;
 	cStepOpenFile			:INT := 10;
@@ -141,6 +140,7 @@ END_VAR
 			IF fbFileGet.bEOF THEN
 				iStep := cStepCloseFile;
 			ELSE
+				GVL.sString[nRow] := sBufferString[0];
 				nRow := nRow + 1;
 				iStep := cStepGetLine;
 			END_IF
@@ -152,7 +152,7 @@ END_VAR
 					iStep := cStepError;	
 				END_IF
 			ELSE
-				fbFileClose(bExecute := FALSE);
+				fbFileClose(bExecute:=FALSE);
 				iStep := cStepInit;
 			END_IF
 			
@@ -171,7 +171,7 @@ FOR ii := 0 TO cMax - 1 DO
 									  pRightString := ADR(aSplit[ii]), nRightSize := SIZEOF(aSplit[ii]),
 									  bSearchFromRight := FALSE);
 									  
-	// assign values from EXTERNAL CONFIG file
+	// assign values from config file
 	GVL.sVars.sEnvironment		:= aSplit[0];
 	GVL.sVars.sCellName			:= aSplit[1];
 	GVL.sVars.sIpAddress 		:= aSplit[2];
@@ -198,13 +198,16 @@ END_FOR
 	]]></ST>
     </Implementation>
     <LineIds Name="FB_ReadFile">
-      <LineId Id="843" Count="91" />
+      <LineId Id="1492" Count="29" />
+      <LineId Id="873" Count="1" />
+      <LineId Id="1522" Count="27" />
+      <LineId Id="903" Count="1" />
+      <LineId Id="1640" Count="29" />
       <LineId Id="1224" Count="0" />
-      <LineId Id="937" Count="30" />
-      <LineId Id="1032" Count="0" />
-      <LineId Id="968" Count="9" />
-      <LineId Id="1080" Count="1" />
-      <LineId Id="978" Count="9" />
+      <LineId Id="1670" Count="22" />
+      <LineId Id="959" Count="1" />
+      <LineId Id="1693" Count="23" />
+      <LineId Id="982" Count="5" />
       <LineId Id="66" Count="0" />
     </LineIds>
   </POU>
