@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.6">
+  <POU Name="FB_ReadFile" Id="{06788eb1-d660-4de5-9dda-892bc287d66f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_ReadFile
+
+VAR
+	CSVMemBufferReader		:FB_CSVMemBufferReader;
+	fbFileOpen				:FB_FileOpen;
+	fbFileGet				:FB_FileGets;
+	fbFileClose				:FB_FileClose;
+	
+	sPathName				:STRING := 'C:\RUO folder\Configuration file branches TEST\';
+	sFileName				:STRING := '\test-branches-config-file\PROD_MasterConfig.txt';
+	sConfigPathFile			:STRING(300) := CONCAT(sPathName, sFileName);
+	
+	bReset					:BOOL;
+	nCol					:INT;
+	hFile					:UINT;
+	value					:STRING[300];
+	sBufferString			:ARRAY[0..100]OF STRING;
+	iStep					:INT;
+	sLine					:STRING;
+	nRow					:INT;
+	bRead					:BOOL := true;
+	bEOF					:BOOL;
+	i						:INT;
+	iCRLFCounter			:INT;
+	
+	// split string
+	aSplit					:ARRAY[0..cMax] OF STRING(255);
+	bResultSplit			:BOOL;
+	ii						:UDINT;
+END_VAR
+VAR CONSTANT
+	cStepInit				:INT := 0;
+	cStepOpenFile			:INT := 10;
+	cStepGetLine			:INT := 20;
+	cStepEOFCheck			:INT := 25;
+	cStepReadLine			:INT := 30;
+	cStepParseData			:INT := 35;
+	cStepCloseFile			:INT := 40;
+	cStepError				:INT := 8000;
+	
+	// split string
+	cMax					:UDINT := 100;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE iStep OF
+	
+	cStepInit:
+	
+		//* semicolon (;) := 16#3B => german field separator, comma (,) := 16#2C => US field separator
+		DEFAULT_CSV_FIELD_SEP := 16#3B;
+		
+		nRow := 0;
+		nCol := 0;
+		iCRLFCounter := 0;
+		bEOF := FALSE;
+		bReset := FALSE;
+		
+		// fb Reset
+		fbFileOpen(bExecute := FALSE);
+		fbFileClose(bExecute := FALSE);
+		fbFileGet(bExecute := FALSE);
+			
+		IF bRead 
+			AND NOT fbfileopen.bBusy
+			AND NOT fbfileclose.bBusy
+			AND NOT fbfileget.bBusy
+			THEN
+			
+			FOR i := 0 TO 24 DO
+				GVL.sString[i] := '';
+				
+			END_FOR
+			iStep := cStepOpenFile;
+			bRead := FALSE;
+		END_IF;
+		
+		cStepOpenFile:
+			fbFileopen(	sNetId := '', sPathName := sConfigPathFile, nMode := FOPEN_MODEREAD,
+						ttimeout := T#3S, ePath := E_OpenPath.PATH_GENERIC, bExecute := TRUE, hFile => hfile);
+					
+		IF NOT fbfileopen.bBusy THEN
+			IF fbfileopen.bError THEN
+				iStep := cStepError;	
+			ELSE
+				iStep := cStepGetLine;
+			END_IF
+		END_IF
+		
+		cStepGetLine:
+			fbFileGet(hFile := hFile, bExecute := TRUE, sLine => sLine);
+	
+		IF NOT fbFileGet.bBusy THEN
+			IF fbFileGet.bError THEN
+				iStep := cStepError;	
+			ELSE IF fbFileGet.bEOF THEN
+				bEOF := TRUE;
+			END_IF
+		(*
+			IF RIGHT( Fileget.sLine, 1 ) = '$N' THEN
+				sCSVLine := REPLACE( sCSVLine, '$R$L', 2, LEN( sCSVLine ) );
+			END_IF
+		*)
+			iStep := cStepEOFCheck;
+			END_IF
+		END_IF
+		
+		cStepEOFCheck:
+				fbFileGet(bExecute := FALSE);
+		IF bEOF THEN
+			iStep := cStepCloseFile;
+		ELSE
+			iStep := cStepReadLine;	
+		END_IF
+	
+		cStepReadLine:
+			nCol := 0;
+			CSVMemBufferReader.eCmd := E_EnumCmdType.eEnumCmd_First;
+				REPEAT
+					CSVMemBufferReader(pBuffer := ADR(sLine), cbBuffer := SIZEOF(sLine), getValue => value);
+				
+					IF CSVMemBufferReader.bOk THEN
+						sBufferString[ncol] := value;
+						CSVMemBufferReader.eCmd := E_EnumCmdType.eEnumCmd_Next;
+						ncol := ncol + 1;
+						IF CSVMemBufferReader.bCRLF THEN
+							iCRLFCounter := iCRLFCounter + 1;
+						END_IF
+					END_IF
+				UNTIL NOT CSVMemBufferReader.bOk 
+				END_REPEAT	
+			istep := cStepParseData;
+			
+		cStepParseData:
+			// check EOF
+			IF fbFileGet.bEOF THEN
+				iStep := cStepCloseFile;
+			ELSE
+				GVL.sString[nRow] := sBufferString[0];
+				nRow := nRow + 1;
+				iStep := cStepGetLine;
+			END_IF
+		
+		cStepCloseFile:	
+			fbFileClose(hFile := hFile, bExecute := TRUE);
+			IF NOT fbFileClose.bBusy THEN
+				IF fbFileClose.bError THEN
+					iStep := cStepError;	
+				END_IF
+			ELSE
+				fbFileClose(bExecute:=FALSE);
+				iStep := cStepInit;
+			END_IF
+			
+		cStepError:
+			IF bReset THEN
+				iStep := cStepInit;
+			END_IF
+END_CASE
+
+// split/parse strings
+FOR ii := 0 TO cMax - 1 DO
+	
+	aSplit[ii] := GVL.sString[ii];
+	bResultSplit := FindAndSplitChar(sSeparatorChar := '=', pSrcString := ADR(aSplit[ii]),
+									  pLeftString := ADR(aSplit[ii + 1]), nLeftSize := SIZEOF(aSplit[ii + 1]),
+									  pRightString := ADR(aSplit[ii]), nRightSize := SIZEOF(aSplit[ii]),
+									  bSearchFromRight := FALSE);
+									  
+	// assign values from config file
+	// cell 00
+	GVL.C000000.sCellName 			:= aSplit[0];
+	GVL.C000000.sIpAddress 			:= aSplit[1];
+	GVL.C000000.sAmsNetId 			:= aSplit[2];
+	GVL.C000000.sOpcUaURL 			:= aSplit[3];
+	GVL.C000000.sUhfRfidOpcUaURL 	:= aSplit[4];
+	GVL.C000000.sHfRfidOpcUaURL		:= aSplit[5];
+	GVL.C000000.sStation1		 	:= aSplit[6];
+	
+	// cell 01
+	GVL.C000001.sCellName 			:= aSplit[7];
+	GVL.C000001.sIpAddress 			:= aSplit[8];
+	GVL.C000001.sAmsNetId 			:= aSplit[9];
+	GVL.C000001.sOpcUaURL 			:= aSplit[10];
+	GVL.C000001.sStation1		 	:= aSplit[11];
+	GVL.C000001.sStation2		 	:= aSplit[12];
+	
+	// cell 02
+	GVL.C000002.sCellName 			:= aSplit[13];
+	GVL.C000002.sIpAddress 			:= aSplit[14];
+	GVL.C000002.sAmsNetId 			:= aSplit[15];
+	GVL.C000002.sOpcUaURL 			:= aSplit[16];
+	GVL.C000002.sStation1		 	:= aSplit[17];
+	
+	// cell 03
+	GVL.C000003.sCellName 			:= aSplit[18];
+	GVL.C000003.sIpAddress 			:= aSplit[19];
+	GVL.C000003.sAmsNetId 			:= aSplit[20];
+	GVL.C000003.sOpcUaURL 			:= aSplit[21];
+	GVL.C000003.sStation1		 	:= aSplit[22];
+	
+	// cell 04
+	GVL.C000004.sCellName 			:= aSplit[23];
+	GVL.C000004.sIpAddress 			:= aSplit[24];
+	GVL.C000004.sAmsNetId 			:= aSplit[25];
+	GVL.C000004.sOpcUaURL 			:= aSplit[26];
+	GVL.C000004.sStation1		 	:= aSplit[27];
+	
+	// cell 05
+	GVL.C000005.sCellName 			:= aSplit[28];
+	GVL.C000005.sIpAddress 			:= aSplit[29];
+	GVL.C000005.sAmsNetId 			:= aSplit[30];
+	GVL.C000005.sOpcUaURL 			:= aSplit[31];
+	GVL.C000005.sStation1		 	:= aSplit[32];
+	
+	// cell 06
+	GVL.C000006.sCellName 			:= aSplit[33];
+	GVL.C000006.sIpAddress 			:= aSplit[34];
+	GVL.C000006.sAmsNetId 			:= aSplit[35];
+	GVL.C000006.sOpcUaURL 			:= aSplit[36];
+	GVL.C000006.sStation1		 	:= aSplit[37];
+	
+	// cell 07
+	GVL.C000007.sCellName 			:= aSplit[38];
+	GVL.C000007.sIpAddress 			:= aSplit[39];
+	GVL.C000007.sAmsNetId 			:= aSplit[40];
+	GVL.C000007.sOpcUaURL 			:= aSplit[41];
+	GVL.C000007.sStation1		 	:= aSplit[42];
+	
+	// cell 08
+	GVL.C000008.sCellName 			:= aSplit[43];
+	GVL.C000008.sIpAddress 			:= aSplit[44];
+	GVL.C000008.sAmsNetId 			:= aSplit[45];
+	GVL.C000008.sOpcUaURL 			:= aSplit[46];
+	GVL.C000008.sStation1		 	:= aSplit[47];
+	
+	// cell 09
+	GVL.C000009.sCellName 			:= aSplit[48];
+	GVL.C000009.sIpAddress 			:= aSplit[49];
+	GVL.C000009.sAmsNetId 			:= aSplit[50];
+	GVL.C000009.sOpcUaURL 			:= aSplit[51];
+	GVL.C000009.sUhfRfidOpcUaURL 	:= aSplit[52];
+	GVL.C000009.sHfRfidOpcUaURL		:= aSplit[53];
+	GVL.C000009.sStation1		 	:= aSplit[54];
+	
+	// cell 10
+	GVL.C000010.sCellName 			:= aSplit[55];
+	GVL.C000010.sIpAddress 			:= aSplit[56];
+	GVL.C000010.sAmsNetId 			:= aSplit[57];
+	GVL.C000010.sOpcUaURL 			:= aSplit[58];
+	GVL.C000010.sStation1		 	:= aSplit[59];
+	GVL.C000010.sStation2		 	:= aSplit[60];
+	
+	// cell 12
+	GVL.C000012.sCellName 			:= aSplit[61];
+	GVL.C000012.sIpAddress 			:= aSplit[62];
+	GVL.C000012.sAmsNetId 			:= aSplit[63];
+	GVL.C000012.sOpcUaURL		 	:= aSplit[64];
+	GVL.C000012.sStation1		 	:= aSplit[65];
+	
+	// linecontroller
+	GVL.LineController.sCellName 	:= aSplit[66];
+	GVL.LineController.sIpAddress 	:= aSplit[67];
+	GVL.LineController.sAmsNetId 	:= aSplit[68];
+	
+	// trackserver
+	GVL.Trackserver.sCellName 		:= aSplit[69];
+	GVL.Trackserver.sIpAddress 		:= aSplit[70];
+	GVL.Trackserver.sAmsNetId 		:= aSplit[71];
+	
+	IF NOT bResultSplit THEN
+		EXIT;
+	END_IF
+END_FOR
+
+
+
+
+
+	]]></ST>
+    </Implementation>
+    <LineIds Name="FB_ReadFile">
+      <LineId Id="1492" Count="29" />
+      <LineId Id="873" Count="1" />
+      <LineId Id="1522" Count="27" />
+      <LineId Id="903" Count="1" />
+      <LineId Id="1640" Count="29" />
+      <LineId Id="1224" Count="0" />
+      <LineId Id="1670" Count="22" />
+      <LineId Id="959" Count="1" />
+      <LineId Id="1693" Count="6" />
+      <LineId Id="1814" Count="0" />
+      <LineId Id="1712" Count="0" />
+      <LineId Id="1788" Count="3" />
+      <LineId Id="1713" Count="0" />
+      <LineId Id="1793" Count="0" />
+      <LineId Id="1795" Count="0" />
+      <LineId Id="1813" Count="0" />
+      <LineId Id="1797" Count="2" />
+      <LineId Id="1802" Count="1" />
+      <LineId Id="1796" Count="0" />
+      <LineId Id="1804" Count="0" />
+      <LineId Id="1815" Count="0" />
+      <LineId Id="1806" Count="2" />
+      <LineId Id="1811" Count="1" />
+      <LineId Id="1816" Count="0" />
+      <LineId Id="1818" Count="4" />
+      <LineId Id="1817" Count="0" />
+      <LineId Id="1823" Count="0" />
+      <LineId Id="1825" Count="4" />
+      <LineId Id="1824" Count="0" />
+      <LineId Id="1830" Count="0" />
+      <LineId Id="1832" Count="4" />
+      <LineId Id="1831" Count="0" />
+      <LineId Id="1837" Count="0" />
+      <LineId Id="1839" Count="4" />
+      <LineId Id="1838" Count="0" />
+      <LineId Id="1844" Count="0" />
+      <LineId Id="1846" Count="4" />
+      <LineId Id="1845" Count="0" />
+      <LineId Id="1851" Count="0" />
+      <LineId Id="1853" Count="4" />
+      <LineId Id="1852" Count="0" />
+      <LineId Id="1858" Count="0" />
+      <LineId Id="1878" Count="0" />
+      <LineId Id="1872" Count="5" />
+      <LineId Id="1859" Count="0" />
+      <LineId Id="1865" Count="0" />
+      <LineId Id="1867" Count="4" />
+      <LineId Id="1866" Count="0" />
+      <LineId Id="1896" Count="0" />
+      <LineId Id="1879" Count="0" />
+      <LineId Id="1881" Count="3" />
+      <LineId Id="1897" Count="0" />
+      <LineId Id="1880" Count="0" />
+      <LineId Id="1886" Count="0" />
+      <LineId Id="1888" Count="2" />
+      <LineId Id="1887" Count="0" />
+      <LineId Id="1891" Count="0" />
+      <LineId Id="1893" Count="2" />
+      <LineId Id="1892" Count="0" />
+      <LineId Id="1792" Count="0" />
+      <LineId Id="1714" Count="2" />
+      <LineId Id="982" Count="5" />
+      <LineId Id="66" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

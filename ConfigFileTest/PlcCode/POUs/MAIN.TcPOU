@@ -6,7 +6,7 @@
 VAR
 	// develop branch
 	fbReadFile					:FB_ReadFile;
-	bHttpGet					:BOOL;
+	bHttpGet					:BOOL := TRUE;
 
     fbHttpClient				:FB_IotHttpClient := (sHostName:='api.github.com', bKeepAlive:=TRUE, tConnectionTimeout:=T#10S);
     fbHttpGetOpen				:FB_HttpGet;

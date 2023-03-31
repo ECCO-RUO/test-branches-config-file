@@ -17,96 +17,6 @@
     <LibraryReferences>{b4556503-f762-4b85-9622-d496b48d5de4}</LibraryReferences>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000000_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000001_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000002_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000003_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000004_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000005_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000006_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000007_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000008_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000009_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000010_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000012_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_LINECONTROLLER_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_TRACKSERVER_DEV.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000000_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000001_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000002_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000003_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000004_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000005_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000006_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000007_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000008_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000009_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000010_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000012_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_LINECONTROLLER_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_TRACKSERVER_PROD.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\DUT_STRUCT_VARIABLES.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DUTs\ST_ReceivedData.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GVLs\GVL.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -114,22 +24,113 @@
     <Compile Include="PlcTask.TcTTO">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="POUs\FB_ReadFile.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="POUs\FB_HttpGet.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="POUs\MAIN.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000000_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000001_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000002_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000003_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000004_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000005_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000006_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000007_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000008_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000009_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000010_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_C000012_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_LINECONTROLLER_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development\DUT_STRUCT_TRACKSERVER_DEV.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000000_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000001_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000002_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000003_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000004_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000005_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000006_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000007_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000008_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000009_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000010_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_C000012_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_LINECONTROLLER_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production\DUT_STRUCT_TRACKSERVER_PROD.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\DUT_STRUCT_VARIABLES.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\FB_HttpGet.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\FB_ReadFile.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ReadConfigFile\ST_ReceivedData.TcDUT">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DUTs" />
-    <Folder Include="DUTs\CELLS_INFO_STRUCTURES\Development" />
-    <Folder Include="DUTs\CELLS_INFO_STRUCTURES\Production" />
-    <Folder Include="DUTs\CELLS_INFO_STRUCTURES" />
     <Folder Include="GVLs" />
+    <Folder Include="ReadConfigFile" />
+    <Folder Include="ReadConfigFile\CELLS_INFO_STRUCTURES" />
+    <Folder Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Development" />
+    <Folder Include="ReadConfigFile\CELLS_INFO_STRUCTURES\Production" />
     <Folder Include="VISUs" />
     <Folder Include="POUs" />
   </ItemGroup>

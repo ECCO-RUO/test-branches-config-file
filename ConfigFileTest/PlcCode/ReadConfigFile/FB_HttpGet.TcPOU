@@ -120,7 +120,23 @@ IF (bHasMember) THEN
   stReceivedData.name := fbJson.GetString(jsonProp);
 END_IF
 
-GVL.sVars.sTag := stReceivedData.name;
+bHasMember := fbJson.HasMember(jsonDoc, 'tarball_url');
+IF (bHasMember) THEN
+  bHasMember := FALSE;
+  jsonProp := fbJson.FindMember(jsonDoc, 'tarball_url');
+  stReceivedData.tarball_url := fbJson.GetString(jsonProp);
+END_IF
+
+bHasMember := fbJson.HasMember(jsonDoc, 'zipball_url');
+IF (bHasMember) THEN
+  bHasMember := FALSE;
+  jsonProp := fbJson.FindMember(jsonDoc, 'zipball_url');
+  stReceivedData.zipball_url := fbJson.GetString(jsonProp);
+END_IF
+
+GVL.sTag := stReceivedData.name;
+GVL.sCommitID := stReceivedData.tarball_url;
+GVL.sRelease := stReceivedData.zipball_url;
 
 
 
@@ -140,8 +156,13 @@ GVL.sVars.sTag := stReceivedData.name;
       <LineId Id="266" Count="0" />
       <LineId Id="181" Count="4" />
       <LineId Id="178" Count="0" />
+      <LineId Id="393" Count="5" />
+      <LineId Id="392" Count="0" />
+      <LineId Id="400" Count="5" />
+      <LineId Id="399" Count="0" />
       <LineId Id="256" Count="0" />
       <LineId Id="262" Count="0" />
+      <LineId Id="390" Count="1" />
       <LineId Id="258" Count="2" />
       <LineId Id="257" Count="0" />
     </LineIds>

@@ -8,7 +8,7 @@ STRUCT
 	sAmsNetId			:STRING := '10.38.191.60.1.1';
 	sOpcUaURL			:STRING := 'opc.tcp://10.38.191.60:4840';
 	sUhfRfidOpcUaURL	:STRING := 'opc.tcp://10.38.190.132:4840';
-	sHfRfidOpcUaURL		:STRING := 'server:opc.tcp://10.38.191.66:4840';
+	sHfRfidOpcUaURL		:STRING := 'opc.tcp://10.38.191.66:4840';
 	sStation1			:STRING := 'S000004';
 	sLastingPC			:STRING := '10.38.191.65';
 END_STRUCT
