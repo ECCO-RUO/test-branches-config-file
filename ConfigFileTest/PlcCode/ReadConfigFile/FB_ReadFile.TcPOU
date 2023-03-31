@@ -10,7 +10,8 @@ VAR
 	fbFileClose				:FB_FileClose;
 	
 	sPathName				:STRING := 'C:\RUO folder\Configuration file branches TEST\';
-	sFileName				:STRING := '\test-branches-config-file\PROD_MasterConfig.txt';
+//	sFileName				:STRING := '\test-branches-config-file\PROD_MasterConfig.txt';
+	sFileName				:STRING := '\test-branches-config-file\DEV_MasterConfig.txt';
 	sConfigPathFile			:STRING(300) := CONCAT(sPathName, sFileName);
 	
 	bReset					:BOOL;
